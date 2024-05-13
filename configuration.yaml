@@ -1,0 +1,17 @@
+connectors:
+  matrix:
+    # Required
+    mxid: "@bot_ghavi:matrix.org"
+    password: "vHc!D?Eq8sTKASd"
+    rooms:
+      'main': '#Team8:matrix.org'
+    # Optional
+    homeserver: "https://matrix.org"
+    nick: "LoveEqualsAmiri"  # The nick will be set on startup
+    device_id: "OPSDroid"
+    enable_encryption: True
+skills:
+  yaghoob:
+    path: skills/yaghoob_skill.py
+  accept_invite:
+    path: skills/accept_invite.py
