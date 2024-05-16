@@ -1,3 +1,5 @@
+
+
 connectors:
   matrix:
     # Required
@@ -7,11 +9,15 @@ connectors:
       'main': '#Team8:matrix.org'
     # Optional
     homeserver: "https://matrix.org"
-    nick: "LoveEqualsAmiri"  # The nick will be set on startup
+    nick: "NLP_BOT_Team8"  # The nick will be set on startup
     device_id: "OPSDroid"
+    device_name: "opsdroid"
     enable_encryption: True
 skills:
-  yaghoob:
-    path: skills/yaghoob_skill.py
+  main_skill:
+    path: skills/main_skill.py
   accept_invite:
     path: skills/accept_invite.py
+
+
+
