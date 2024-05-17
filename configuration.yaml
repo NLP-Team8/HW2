@@ -1,5 +1,3 @@
-
-
 connectors:
   matrix:
     # Required
@@ -10,14 +8,19 @@ connectors:
     # Optional
     homeserver: "https://matrix.org"
     nick: "NLP_BOT_Team8"  # The nick will be set on startup
-    device_id: "OPSDroid"
-    device_name: "opsdroid"
+    # device_id: "OPSDroid"
+    # device_name: "opsdroid"
     enable_encryption: True
 skills:
   main_skill:
     path: skills/main_skill.py
   accept_invite:
     path: skills/accept_invite.py
+
+databases:
+  sqlite:
+    type: sqlite
+    file: opsdroid.db
 
 
 
