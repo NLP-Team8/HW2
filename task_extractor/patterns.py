@@ -11,6 +11,7 @@ class Patterns:
         NUM = f"(?:<{ANY_P},'NUM'>)"
         VERB = f"(?:<{ANY_P},'VERB'>)"
         ADP = f"(?:<{ANY_P},'ADP'>)"
+        ADV = f"(?:<{ANY_P},'ADV'>)"
         CCONJ = f"(?:<{ANY_P},'CCONJ'>)"
         DET = f"(?:<{ANY_P},'DET'>)"
         NUM_GROUP = f"(?:{NUM}(?:{CCONJ}{NUM})*)"
@@ -18,29 +19,42 @@ class Patterns:
         NP_GROUP = f"(?:{NP}(?:{CCONJ}{NP})*)"
         VP = f"(?:(?:{NOUN}|{ADJ})?{VERB})"
         MONTH = f"(?:{AGG_WORDS('NOUN', ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'])})"
+        ADJECTIVES =f"(?:{AGG_WORDS('NOUN', ['زوج', 'فرد'])})"
         TIME = r"(?:<'\d+:\d+(?::\d+)?','NUM'>)"
         DATE = f"(?:{NUM_GROUP}{MONTH})"
         DATETIME = f"(?:{DATE}{TIME}|{TIME}{DATE}|{DATE}|{TIME})"
         TASK_WORDS = ['وظیفه', 'تسک', 'کار', 'جلسه']
-        PERIODICITY = r"(?:<'هر روز','NOUN'>)"
+        # PERIODICITY_WORDS= ['هر روز', 'دو روز یک بار', 'سه روز یکبار', 'روز زوج' ,'روز‌های زوج', 'روز های زوج', 'روز فرد', 'روز های فرد', 'روز‌های فرد', 'آخر هفته', 'اخر هفته', 'اخر هفته‌ها', 'اخر هفته‌ ها', 'آخر هفته‌ ها' ]
+        PERIODICITY_WORDS = ['روز', 'هفته', 'روز\u200cهای']
+        PERIODICITY_REGEX = f"(?:{DET}?{NUM}?{ADJ}?{AGG_WORDS(ANY, PERIODICITY_WORDS)}{NUM}?{ADV}?{ADJ}?{ADJECTIVES}?)"
         ASSIGNEE_WORDS = ['مسئول', 'مسئولین', 'مسئولان', 'مسئولیت']
+        REMINDER_WORDS = ['یادم', 'یاداوری']
         START_WORDS = ['شروع', 'استارت']
         CHANGE_WORDS = ['تغییر', 'عوض']
         CANCEL_WORDS = ['لغو', 'حذف', 'کنسل']
         CANCEL_REGEX = f"(?:{AGG_WORDS('NOUN', CANCEL_WORDS)}(?P<CANCEL>{VP}))"
+        REMINDER_REGEX = f"(?:{AGG_WORDS('NOUN', REMINDER_WORDS)}(?P<REMIND>{VP}))"
         # CHANGE_REGEX = f"(?:{AGG_WORDS('NOUN', CHANGE_WORDS)}(?P<CHANGE>{VP}))"
         END_WORDS = ['پایان', 'تمام', 'انجام', 'تحویل', 'تمدید']
         TASK = f"(?:{AGG_WORDS('NOUN', TASK_WORDS)}(?P<NAME>{NP}))"
+        TASK2 = f"(?:{AGG_WORDS('NOUN',REMINDER_WORDS)}(?P<REMIND>{VP}){ADP}?(?P<NAME>{NP}))"
         DECLARATIONS = [
             f"(?:{TASK}{ADP}+(?P<START_DATE>{DATETIME}){AGG_WORDS(ANY, START_WORDS)}{VERB}{ANY_T}+{ADP}+(?P<END_DATE>{DATETIME}){AGG_WORDS(ANY, END_WORDS)}{VERB})",
             f"(?:{TASK}{ADP}?{VERB}{ADP}?(?P<START_DATE>{DATETIME}){AGG_WORDS(ANY, START_WORDS)}{VERB})",
             f"(?:{TASK}{ADP}?{VERB}{ADP}?(?P<END_DATE>{DATETIME}){AGG_WORDS(ANY, END_WORDS)}{VERB})",
             f"(?:(?P<ASSIGNEES>{NP_GROUP}){AGG_WORDS(ANY, ASSIGNEE_WORDS)}{TASK}{VERB})",
             f"(?:{AGG_WORDS(ANY, ASSIGNEE_WORDS)}{TASK}{ADP}?(?P<ASSIGNEES>{NP_GROUP}){VERB})",
-            f"(?:{TASK}{ADP}?{ADP}?(?P<START_DATE>{DATETIME}){AGG_WORDS(ANY, START_WORDS)}?)",
-            f"(?:{TASK}{ADP}?{ADP}?)",
             
-
+            f"(?:{TASK}{ADP}?(?P<PERIODICITY>{PERIODICITY_REGEX})?)",
+            f"(?:{TASK2}{ADP}?(?P<PERIODICITY>{PERIODICITY_REGEX})?)",
+            f"(?:{TASK}{ADP}?{ADP}?(?P<START_DATE>{DATETIME}){AGG_WORDS(ANY, START_WORDS)}?)",
+            f"(?:{TASK2}{ADP}?{ADP}?(?P<START_DATE>{DATETIME}){AGG_WORDS(ANY, START_WORDS)}?)",
+            f"(?:{TASK}{ADP}?{ADP}?)",
+            f"(?:{TASK2}{ADP}?{ADP}?)",
+            
+            
+            
+            
 
         ]
         ASSIGNMENTS = [
