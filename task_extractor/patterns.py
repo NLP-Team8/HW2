@@ -11,6 +11,7 @@ class Patterns:
         NUM = f"(?:<{ANY_P},'NUM'>)"
         VERB = f"(?:<{ANY_P},'VERB'>)"
         ADP = f"(?:<{ANY_P},'ADP'>)"
+        SCONJ = f"(?:<{ANY_P},'SCONJ'>)"
         ADV = f"(?:<{ANY_P},'ADV'>)"
         CCONJ = f"(?:<{ANY_P},'CCONJ'>)"
         DET = f"(?:<{ANY_P},'DET'>)"
@@ -21,11 +22,14 @@ class Patterns:
         MONTH = f"(?:{AGG_WORDS('NOUN', ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'])})"
         ADJECTIVES =f"(?:{AGG_WORDS('NOUN', ['زوج', 'فرد'])})"
         TIME = r"(?:<'\d+:\d+(?::\d+)?','NUM'>)"
+        SAAT_WORD = f"(?:{AGG_WORDS('NOUN', [ 'ساعت'])})"
+        
         DATE = f"(?:{NUM_GROUP}{MONTH})"
         DATETIME = f"(?:{DATE}{TIME}|{TIME}{DATE}|{DATE}|{TIME})"
+        SAAT_REGEX = f"(?:{SAAT_WORD}{TIME}{DATE}|{DATE}{SAAT_WORD}{TIME}|{SAAT_WORD}{TIME}|{DATE})"
         TASK_WORDS = ['وظیفه', 'تسک', 'کار', 'جلسه']
         # PERIODICITY_WORDS= ['هر روز', 'دو روز یک بار', 'سه روز یکبار', 'روز زوج' ,'روز‌های زوج', 'روز های زوج', 'روز فرد', 'روز های فرد', 'روز‌های فرد', 'آخر هفته', 'اخر هفته', 'اخر هفته‌ها', 'اخر هفته‌ ها', 'آخر هفته‌ ها' ]
-        PERIODICITY_WORDS = ['روز', 'هفته', 'روز\u200cهای']
+        PERIODICITY_WORDS = ['روز', 'هفته', 'روز\u200cهای', 'ساعت']
         PERIODICITY_REGEX = f"(?:{DET}?{NUM}?{ADJ}?{AGG_WORDS(ANY, PERIODICITY_WORDS)}{NUM}?{ADV}?{ADJ}?{ADJECTIVES}?)"
         ASSIGNEE_WORDS = ['مسئول', 'مسئولین', 'مسئولان', 'مسئولیت']
         REMINDER_WORDS = ['یادم', 'یاداوری']
@@ -37,7 +41,8 @@ class Patterns:
         # CHANGE_REGEX = f"(?:{AGG_WORDS('NOUN', CHANGE_WORDS)}(?P<CHANGE>{VP}))"
         END_WORDS = ['پایان', 'تمام', 'انجام', 'تحویل', 'تمدید']
         TASK = f"(?:{AGG_WORDS('NOUN', TASK_WORDS)}(?P<NAME>{NP}))"
-        TASK2 = f"(?:{AGG_WORDS('NOUN',REMINDER_WORDS)}(?P<REMIND>{VP}){ADP}?(?P<NAME>{NP}))"
+        TASK2 = f"(?:{AGG_WORDS('NOUN',REMINDER_WORDS)}(?P<REMIND>{VP}|{NOUN}){SCONJ}?{ADP}?(?P<NAME>{NP}))"
+        TASKREVERSE = f"(?:{AGG_WORDS('NOUN',REMINDER_WORDS)}(?P<REMIND>{VP}|{NOUN}){SCONJ}?{ADP}?(?P<PERIODICITY>{PERIODICITY_REGEX})(?P<NAME>{NP}))"
         DECLARATIONS = [
             f"(?:{TASK}{ADP}+(?P<START_DATE>{DATETIME}){AGG_WORDS(ANY, START_WORDS)}{VERB}{ANY_T}+{ADP}+(?P<END_DATE>{DATETIME}){AGG_WORDS(ANY, END_WORDS)}{VERB})",
             f"(?:{TASK}{ADP}?{VERB}{ADP}?(?P<START_DATE>{DATETIME}){AGG_WORDS(ANY, START_WORDS)}{VERB})",
@@ -45,10 +50,16 @@ class Patterns:
             f"(?:(?P<ASSIGNEES>{NP_GROUP}){AGG_WORDS(ANY, ASSIGNEE_WORDS)}{TASK}{VERB})",
             f"(?:{AGG_WORDS(ANY, ASSIGNEE_WORDS)}{TASK}{ADP}?(?P<ASSIGNEES>{NP_GROUP}){VERB})",
             
-            f"(?:{TASK}{ADP}?(?P<PERIODICITY>{PERIODICITY_REGEX})?)",
-            f"(?:{TASK2}{ADP}?(?P<PERIODICITY>{PERIODICITY_REGEX})?)",
-            f"(?:{TASK}{ADP}?{ADP}?(?P<START_DATE>{DATETIME}){AGG_WORDS(ANY, START_WORDS)}?)",
-            f"(?:{TASK2}{ADP}?{ADP}?(?P<START_DATE>{DATETIME}){AGG_WORDS(ANY, START_WORDS)}?)",
+
+            f"(?:{TASK}{ADP}?{ADP}?(?P<START_DATE>{SAAT_REGEX}){AGG_WORDS(ANY, START_WORDS)}?)",
+            f"(?:{TASK2}{ADP}?{ADP}?(?P<START_DATE>{SAAT_REGEX}){AGG_WORDS(ANY, START_WORDS)}?)",
+            
+            f"(?:{TASK}{ADP}?(?P<PERIODICITY>{PERIODICITY_REGEX}))",
+            f"(?:{TASK2}{ADP}?(?P<PERIODICITY>{PERIODICITY_REGEX}))",
+
+            f"(?:{TASKREVERSE}{ADP}?{AGG_WORDS(ANY, START_WORDS)})",
+            f"(?:{TASKREVERSE}{ADP}?{VERB})",
+            
             f"(?:{TASK}{ADP}?{ADP}?)",
             f"(?:{TASK2}{ADP}?{ADP}?)",
             
@@ -82,7 +93,7 @@ class Patterns:
         ]
         CANCELLATIONS = [f"(?:{TASK}{ADP}.*{CANCEL_REGEX})"]
         DONES = [f"(?:{TASK}{ADP}?.*{AGG_WORDS(ANY, END_WORDS)}{VERB})"]
-        CHANGED = [f"(?:{TASK}{ADP}?{ADP}?(?P<NEW_DATE>{DATETIME}){AGG_WORDS(ANY, CHANGE_WORDS)})"]
+        CHANGED = [f"(?:{TASK}{ADP}?{ADP}?(?P<NEW_DATE>{SAAT_REGEX}){AGG_WORDS(ANY, CHANGE_WORDS)})"]
 
         def __init__(self):
             self.compiled = {}
