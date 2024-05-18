@@ -23,7 +23,7 @@
 #     file: opsdroid.db
 
 web:
-  base-url: "https://240a-193-29-107-90.ngrok-free.app"
+  base-url: "https://c21c-193-29-107-90.ngrok-free.app"
 connectors:
     telegram:
       token: "7095268559:AAE8-6F2wqclDO6MVoXeFuIkWZp4EArQ2nE"
@@ -33,6 +33,8 @@ skills:
     path: skills/main_skill.py
   accept_invite:
     path: skills/accept_invite.py
+  welcome:
+    path: skill/welcome_skill.py
 
 databases:
   sqlite:
