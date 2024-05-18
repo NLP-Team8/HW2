@@ -1,16 +1,22 @@
+web:
+  base-url: "https://87a5-31-2-141-218.ngrok-free.app"
+
 connectors:
-  matrix:
-    # Required
-    mxid: "@bot_ghavi:matrix.org"
-    password: "vHc!D?Eq8sTKASd"
-    rooms:
-      'main': '#Team8:matrix.org'
-    # Optional
-    homeserver: "https://matrix.org"
-    nick: "NLP_BOT_Team8"  # The nick will be set on startup
-    # device_id: "OPSDroid"
-    # device_name: "opsdroid"
-    enable_encryption: True
+#  matrix:
+#    # Required
+#    mxid: "@bot_ghavi:matrix.org"
+#    password: "vHc!D?Eq8sTKASd"
+#    rooms:
+#      'main': '#Team8:matrix.org'
+#    # Optional
+#    homeserver: "https://matrix.org"
+#    nick: "NLP_BOT_Team8"  # The nick will be set on startup
+#    # device_id: "OPSDroid"
+#    # device_name: "opsdroid"
+#    enable_encryption: True
+    telegram:
+      token: "7095268559:AAE8-6F2wqclDO6MVoXeFuIkWZp4EArQ2nE"
+      reply-unauthorized: True
 skills:
   main_skill:
     path: skills/main_skill.py
