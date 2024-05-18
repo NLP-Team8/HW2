@@ -7,11 +7,8 @@ from task_extractor.parser import MixedRegexpParser
 class Task:
     def __init__(self):
         self.name = ''
-        self.subtasks = []
-        self.assignees = []
-        self.start_date = ''
-        self.end_date = ''
-        self.new_date = ''
+        self.time = ''
+        self.periodicity = ''
         self.is_done = False
         self.is_cancelled = False
 
@@ -55,47 +52,25 @@ class TaskExtractor:
     
     def parse_start_date(self, task, groups):
         if 'START_DATE' in groups:
-            task.start_date = ' '.join(word for word, tag in groups['START_DATE'])
+            task.time = ' '.join(word for word, tag in groups['START_DATE'])
 
     def parse_new_date(self, task, groups):
         if 'NEW_DATE' in groups:
             
             task.new_date = ' '.join(word for word, tag in groups['NEW_DATE'])
-            task.start_date = task.new_date
+            task.time = task.new_date
+
+    def parse_periodicity(self, task, groups):
+        if 'PERIODICITY' in groups:
+            task.periodicity = ' '.join(word for word, tag in groups['PERIODICITY'])
     
     def parse_end_date(self, task, groups):
         if 'END_DATE' in groups:
             task.end_date = ' '.join(word for word, tag in groups['END_DATE'])
     
-    def parse_assignees(self, task, groups):
-        if 'ASSIGNEES' in groups:
-            task.assignees = ['']
-            for i, (word, tag) in enumerate(groups['ASSIGNEES']):
-                if word in self.patterns.TASK_WORDS:
-                    groups['ASSIGNEES'] = groups['ASSIGNEES'][i+1:]
-                    break
-            for word, tag in groups['ASSIGNEES']:
-                if tag == 'CCONJ':
-                    task.assignees[-1] = task.assignees[-1][:-1]
-                    task.assignees.append('')
-                else:
-                    task.assignees[-1] += word + ' '
-            task.assignees[-1] = task.assignees[-1][:-1]
+
     
-    def parse_subtasks(self, task, groups):
-        if 'SUBTASKS' in groups:
-            task.subtasks = ['']
-            for i, (word, tag) in enumerate(groups['SUBTASKS']):
-                if re.match(r"ابتدا|اول", word):
-                    continue
-                elif re.match(r"سپس|بعد", word):
-                    if i > 1 and re.match(r'CCONJ', groups['SUBTASKS'][i - 1][1]):
-                        task.subtasks[-1] = task.subtasks[-1][:-len(groups['SUBTASKS'][i - 1][0]) - 1]
-                    task.subtasks[-1] = task.subtasks[-1][:-1]
-                    task.subtasks.append('')
-                else:
-                    task.subtasks[-1] += word + ' '
-            task.subtasks[-1] = task.subtasks[-1][:-1]
+    
 
     def run(self, text: str) -> list[Task]:
         text = self.normalizer.normalize(text)
@@ -104,9 +79,8 @@ class TaskExtractor:
             tags = self.POS_tagger.tag(words)
             tags = [tag for tag in tags if tag[1] != 'PUNCT']
             for pattern in self.patterns['DECLARATIONS']:
-                
                 result = pattern.parse(tags)
-                
+                # print(tags)
                 if result:
                     matches, groups = result
                     name = self.parse_name(groups)
@@ -116,8 +90,7 @@ class TaskExtractor:
                     task.name = name
                     self.parse_start_date(task, groups)
                     self.parse_end_date(task, groups)
-                    self.parse_assignees(task, groups)
-                    self.parse_subtasks(task, groups)
+                    self.parse_periodicity(task, groups)
                     self.tasks.append(task)
             if not self.tasks:
                 continue
@@ -125,8 +98,7 @@ class TaskExtractor:
                 result = pattern.parse(tags)
                 if result:
                     matches, groups = result
-                    self.parse_assignees(self.tasks[-1], groups)
-                    self.parse_subtasks(self.tasks[-1], groups)
+                    self.parse_periodicity(self.tasks[-1], groups)
                     self.parse_start_date(self.tasks[-1], groups)
                     self.parse_end_date(self.tasks[-1], groups)
 
@@ -134,6 +106,7 @@ class TaskExtractor:
                 result = pattern.parse(tags)
                 if result:
                     task.is_cancelled = True
+
 
             for pattern in self.patterns['DONES']:
                 result = pattern.parse(tags)
@@ -143,7 +116,6 @@ class TaskExtractor:
             for pattern in self.patterns['CHANGED']:
                 result = pattern.parse(tags)
               
-    
                 if result:
                     matches, groups = result
                
