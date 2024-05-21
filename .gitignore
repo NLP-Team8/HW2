@@ -2,5 +2,8 @@ venv/
 build/
 dist/
 task_extractor.egg-info/
-task_extractor/__pycache__
-HW.ipynb
+task_extractor/__pycache__/
+/.ipynb_checkpoints
+/HW.ipynb
+
+
