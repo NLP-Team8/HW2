@@ -11,6 +11,7 @@ class Task:
         self.periodicity = ''
         self.is_done = False
         self.is_cancelled = False
+        self.task_type = 'add'
 
     def __repr__(self):
         return json.dumps(self.__dict__, indent=4, ensure_ascii=False)
@@ -57,8 +58,7 @@ class TaskExtractor:
     def parse_new_date(self, task, groups):
         if 'NEW_DATE' in groups:
             
-            task.new_date = ' '.join(word for word, tag in groups['NEW_DATE'])
-            task.time = task.new_date
+            task.time = ' '.join(word for word, tag in groups['NEW_DATE'])
 
     def parse_periodicity(self, task, groups):
         if 'PERIODICITY' in groups:
@@ -81,6 +81,7 @@ class TaskExtractor:
             for pattern in self.patterns['DECLARATIONS']:
                 result = pattern.parse(tags)
                 # print(tags)
+                print(result)
                 if result:
                     matches, groups = result
                     name = self.parse_name(groups)
@@ -92,6 +93,7 @@ class TaskExtractor:
                     self.parse_end_date(task, groups)
                     self.parse_periodicity(task, groups)
                     self.tasks.append(task)
+                    break
             if not self.tasks:
                 continue
             for pattern in self.patterns['ASSIGNMENTS'] + self.patterns['UPDATE_START_DATES'] + self.patterns['UPDATE_DEADLINES'] + self.patterns['SUBTASK_DECLARATIONS']:
@@ -105,12 +107,14 @@ class TaskExtractor:
             for pattern in self.patterns['CANCELLATIONS']:
                 result = pattern.parse(tags)
                 if result:
+                    task.task_type = 'cancelation'
                     task.is_cancelled = True
 
 
             for pattern in self.patterns['DONES']:
                 result = pattern.parse(tags)
                 if result:
+                    task.task_type = 'done'
                     task.is_done = True
 
             for pattern in self.patterns['CHANGED']:
@@ -118,8 +122,8 @@ class TaskExtractor:
               
                 if result:
                     matches, groups = result
-               
                     self.parse_new_date(self.tasks[-1], groups)
+                    task.task_type = 'change'
                     
 
             for pattern in self.patterns.DONES:
