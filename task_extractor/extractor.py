@@ -81,7 +81,7 @@ class TaskExtractor:
             for pattern in self.patterns['DECLARATIONS']:
                 result = pattern.parse(tags)
                 # print(tags)
-                print(result)
+                # print(result)
                 if result:
                     matches, groups = result
                     name = self.parse_name(groups)
@@ -96,13 +96,7 @@ class TaskExtractor:
                     break
             if not self.tasks:
                 continue
-            for pattern in self.patterns['ASSIGNMENTS'] + self.patterns['UPDATE_START_DATES'] + self.patterns['UPDATE_DEADLINES'] + self.patterns['SUBTASK_DECLARATIONS']:
-                result = pattern.parse(tags)
-                if result:
-                    matches, groups = result
-                    self.parse_periodicity(self.tasks[-1], groups)
-                    self.parse_start_date(self.tasks[-1], groups)
-                    self.parse_end_date(self.tasks[-1], groups)
+            
 
             for pattern in self.patterns['CANCELLATIONS']:
                 result = pattern.parse(tags)
