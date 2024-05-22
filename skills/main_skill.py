@@ -14,17 +14,28 @@ class HelloSkill(Skill):
 
     @match_regex(r'.*')
     async def hello(self, message):
-        if message.text == 'بگو':
+        if message.text.strip() == 'بگو':
             # print('--------------------------------------')
-            res = self.cur.execute("SELECT * FROM tasks")
+            res = self.cur.execute(f"SELECT * FROM tasks WHERE user='{message.user}'")
             ans = res.fetchall()
             await message.respond(str(ans))
             return
-        if message.text == 'ریست':
+        if message.text.strip() == 'ریست':
             self.cur.execute(f"DELETE FROM tasks")
             self.con.commit()
             await message.respond('همه تسک‌ها پاک شد.')
             return
+        if message.text.strip() == 'راهنما':
+            response_text = '''
+با استفاده از پیامی مانند "یادم باشه کتاب را ساعت 8:0 روز 5 تیر بخوانم. می‌توانید تسک‌ اضافه کنید.
+با پیامی مانند تسک کتاب را کنسل بکن می‌توانید تسک را کنسل کنید.
+با پیامی مانند تسک کتاب تمام شد نیز می‌توانید اتمام تسک را به برنامه اضافه کنید.
+می‌توانید زمان یک تسک را نیز با گفتن دوباره آن با زمان جدید عوض کنید.
+با پیام ریست کل تسک‌ها از دیتابیس پاک می‌شوند.
+'''
+            await message.respond(response_text)
+            return
+        
 
 
         # await message.respond('Hey, I love Alireza Amiri!')
