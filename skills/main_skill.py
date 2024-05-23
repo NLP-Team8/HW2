@@ -14,12 +14,8 @@ class HelloSkill(Skill):
 
     @match_regex(r'.*')
     async def hello(self, message):
-        if message.text.strip() == 'بگو':
-            # print('--------------------------------------')
-            res = self.cur.execute(f"SELECT * FROM tasks WHERE user='{message.user}'")
-            ans = res.fetchall()
-            await message.respond(str(ans))
-            return
+        print("Pending Response to", message.user)
+
         if message.text.strip() == 'ریست':
             self.cur.execute(f"DELETE FROM tasks")
             self.con.commit()
@@ -36,11 +32,6 @@ class HelloSkill(Skill):
             await message.respond(response_text)
             return
         
-
-
-        # await message.respond('Hey, I love Alireza Amiri!')
-
-        print("Pending Response to", message.user)
         extractor = TaskExtractor()
         extractor.run(message.text)
 
@@ -51,10 +42,29 @@ class HelloSkill(Skill):
                 self.finish_task(task, message.user)
             if task.task_type == "change":
                 self.change_task_time(task, message.user)
+            if task.task_type == "return":
+                if len(task.time.strip()) == 0 and len(task.periodicity.strip()) == 0:
+                    res = self.cur.execute(f"SELECT * FROM tasks WHERE user='{message.user}'").fetchall()
+                elif len(task.time.strip()) == 0:
+                    res = self.cur.execute(f"SELECT * FROM tasks WHERE user='{message.user}' AND period='{task.periodicity}'").fetchall()
+                elif len(task.periodicity.strip()) == 0:
+                    res = self.cur.execute(f"SELECT * FROM tasks WHERE user='{message.user}' AND time='{task.time}'").fetchall()
+                else:
+                    res = self.cur.execute(f"SELECT * FROM tasks WHERE user='{message.user}' AND time='{task.time}' AND period='{task.periodicity}'").fetchall()
+                await message.respond(str(res))
             if task.task_type == "add":
                 self.add_task(task, message.user)
 
-        await message.respond(str(extractor.tasks))
+        response_text = '['
+        has_non_return_type = False
+        for i, task in enumerate(extractor.tasks):
+            # print(task.task_type+'-----------+++++')
+            if task.task_type != 'return':
+                response_text += '\n' + str(i) + ':\n' + str(task) + '\n'
+                has_non_return_type = True
+        response_text += ']'
+        if has_non_return_type:
+            await message.respond(response_text)
     
     def add_task(self, task, username):
         username, name, time, period, done, cancel = username, task.name, task.time, task.periodicity, int(task.is_done), int(task.is_cancelled)
