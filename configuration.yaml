@@ -36,7 +36,7 @@ databases:
 #   accept_invite:
 #     path: skills/accept_invite.py
 #   welcome:
-#     path: skill/welcome_skill.py
+#     path: skills/welcome_skill.py
 
 # databases:
 #   sqlite:
