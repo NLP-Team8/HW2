@@ -90,8 +90,8 @@ class TaskExtractor:
 
             for pattern in self.patterns['RETURNS']:
                 result = pattern.parse(tags)
-                print(tags)
-                print(result)
+                # print(tags)
+                # print(result)
                 if result:
                     matches, groups = result
                     task = Task()
