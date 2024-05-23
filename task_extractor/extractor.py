@@ -60,6 +60,15 @@ class TaskExtractor:
             
             task.time = ' '.join(word for word, tag in groups['NEW_DATE'])
 
+    def parse_period(self, task, groups):
+
+        if 'PERIOD' in groups:
+            
+            
+            task.time = ' '.join(self.lemmatizer.lemmatize(word) for word, tag in groups['PERIOD'])
+            
+            
+
     def parse_periodicity(self, task, groups):
         if 'PERIODICITY' in groups:
             task.periodicity = ' '.join(word for word, tag in groups['PERIODICITY'])
@@ -78,6 +87,19 @@ class TaskExtractor:
             words = self.word_tokenizer.tokenize(sent)
             tags = self.POS_tagger.tag(words)
             tags = [tag for tag in tags if tag[1] != 'PUNCT']
+
+            for pattern in self.patterns['RETURNS']:
+                result = pattern.parse(tags)
+                print(tags)
+                print(result)
+                if result:
+                    matches, groups = result
+                    task = Task()
+                    self.parse_period(task, groups)
+                    self.tasks.append(task)
+                    task.task_type = "return"
+                    break
+
             for pattern in self.patterns['DECLARATIONS']:
                 result = pattern.parse(tags)
                 # print(tags)
@@ -96,6 +118,10 @@ class TaskExtractor:
                     break
             if not self.tasks:
                 continue
+
+            
+
+
             
 
             for pattern in self.patterns['CANCELLATIONS']:
