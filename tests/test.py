@@ -31,7 +31,7 @@ class checkAdd(unittest.TestCase):
     ############# 2 ##################
     def test_2(self):
         text = "باید هر ۳ روز یکبار مشق‌هایم را بنویسم"
-        name = "مشق‌هایم را بنویسم"
+        name = "مشق‌هایم"
         task_type = "add"
         time = ""
         periodicity = "هر ۳ روز یکبار"
@@ -41,8 +41,8 @@ class checkAdd(unittest.TestCase):
         pass
     ################ 3 ###################
     def test_3(self):
-        text = "نیاز به یادآوری دارم تا ۵ اردبیهشت قرصم را بخورم."
-        name = "قرصم را بخورم"
+        text = "نیاز به یادآوری دارم تا ۵ اردیبهشت قرصم را بخورم."
+        name = "قرصم"
         task_type = "add"
         time = "۵ اردیبهشت"
         periodicity = ""
@@ -119,7 +119,7 @@ class checkAdd(unittest.TestCase):
     ########## 10 ###########
     def test_10(self):
         text = "جلسه اتوکشی را به تقویمم برای روز ۲۱ فروردین اضافه کن."
-        name =  "جلسه اتوکشی"
+        name =  "اتوکشی"
         task_type = "add"
         time = "۲۱ فروردین"
         periodicity = ""
