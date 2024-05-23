@@ -55,8 +55,8 @@ class checkAdd(unittest.TestCase):
         text = "یادم باشد هر روز ساعت ۸ صبح به جلسه اسکرام بروم."
         name = "جلسه اسکرام"
         task_type = "add"
-        time = "۸ صبح"
-        periodicity = "هرروز"
+        time =  "ساعت ۸ صبح"
+        periodicity = "هر روز"
         is_done = False
         is_cancelled = False
         self.check(text, name, task_type, time, periodicity, is_done, is_cancelled)
@@ -133,6 +133,266 @@ class checkAdd(unittest.TestCase):
         name =  "شستن ظروف آقای امیری"
         task_type = "add"
         time = "۳۰ دی ساعت ۴:۳۰"
+        periodicity = ""
+        is_done = False
+        is_cancelled = False
+        self.check(text, name, task_type, time, periodicity, is_done, is_cancelled)
+        pass
+
+class check_cancell(unittest.TestCase):
+    def __init__(self, methodName: str = "runTest") -> None:
+        self.task_extractor = TaskExtractor()
+        super().__init__(methodName)
+    def check(self, text, name, task_type, time, periodicity, is_done, is_cancelled):
+        self.task_extractor.run(text)
+        self.assertEqual(self.task_extractor.tasks[0].name, name, "TASK NAME DIDN'T MATCH!")
+        self.assertEqual(self.task_extractor.tasks[0].task_type, task_type, "TASK TYPE DIDN'T MATCH")
+        self.assertEqual(self.task_extractor.tasks[0].time, time, "TIMES DIDN'T MATCH")
+        self.assertEqual(self.task_extractor.tasks[0].periodicity, periodicity, "PERIODICITIES DIDN'T MATCH")
+        self.assertEqual(self.task_extractor.tasks[0].is_done, is_done,"IS_DONE WRONG!")
+        self.assertEqual(self.task_extractor.tasks[0].is_cancelled, is_cancelled, "IS_CANCELLED WRONG!")
+    
+    def test_1(self):
+        text = "جلسه اسکرام روزانه ام را لغو کن."
+        name =  "اسکرام"
+        task_type = "cancelation"
+        time = ""
+        periodicity = "روزانه"
+        is_done = False
+        is_cancelled = True
+        self.check(text, name, task_type, time, periodicity, is_done, is_cancelled)
+        pass
+    def test_2(self):
+        text = "جلسه اسکرام را لغو کن."
+        name =  "اسکرام"
+        task_type = "cancelation"
+        time = ""
+        periodicity = ""
+        is_done = False
+        is_cancelled = True
+        self.check(text, name, task_type, time, periodicity, is_done, is_cancelled)
+        pass
+    def test_3(self):
+        text = "کار طی زدن زمین به حول و قوه الهی کنسل شد."
+        name =  "طی زدن زمین"
+        task_type = "cancelation"
+        time = ""
+        periodicity = ""
+        is_done = False
+        is_cancelled = True
+        self.check(text, name, task_type, time, periodicity, is_done, is_cancelled)
+        pass
+    def test_4(self):
+        text = "تسک طی زدن زمین کنسل شد."
+        name =  "طی زدن زمین"
+        task_type = "cancelation"
+        time = ""
+        periodicity = ""
+        is_done = False
+        is_cancelled = True
+        self.check(text, name, task_type, time, periodicity, is_done, is_cancelled)
+        pass
+    def test_5(self):
+        text = "امشب جلسه سران قوا بود که کنسل شد."
+        name =  "سران قوا"
+        task_type = "cancelation"
+        time = "امشب"
+        periodicity = ""
+        is_done = False
+        is_cancelled = True
+        self.check(text, name, task_type, time, periodicity, is_done, is_cancelled)
+        pass
+    def test_6(self):
+        text = "وظیفه شستن ماشین آقای امیری عشق کنسل شد."
+        name =  "شستن ماشین آقای امیری عشق"
+        task_type = "cancelation"
+        time = ""
+        periodicity = ""
+        is_done = False
+        is_cancelled = True
+        self.check(text, name, task_type, time, periodicity, is_done, is_cancelled)
+        pass
+    def test_7(self):
+        text = "کار بیگاری را کنسل بکن."
+        name =  "بیگاری"
+        task_type = "cancelation"
+        time = ""
+        periodicity = ""
+        is_done = False
+        is_cancelled = True
+        self.check(text, name, task_type, time, periodicity, is_done, is_cancelled)
+        pass
+    def test_8(self):
+        text = "کار بیگاری را کنسل نکن."
+        name =  "بیگاری"
+        task_type = "cancelation"
+        time = ""
+        periodicity = ""
+        is_done = False
+        is_cancelled = False
+        self.check(text, name, task_type, time, periodicity, is_done, is_cancelled)
+        pass
+    def test_9(self):
+        text = "آقای امیری جلسه اسکرام را لغو کرد."
+        name =  "اسکرام"
+        task_type = "cancelation"
+        time = ""
+        periodicity = ""
+        is_done = False
+        is_cancelled = True
+        self.check(text, name, task_type, time, periodicity, is_done, is_cancelled)
+        pass
+    def test_10(self):
+        text = "آقای امیری جلسه اسکرام را لغو کردند."
+        name =  "اسکرام"
+        task_type = "cancelation"
+        time = ""
+        periodicity = ""
+        is_done = False
+        is_cancelled = True
+        self.check(text, name, task_type, time, periodicity, is_done, is_cancelled)
+        pass
+    def test_11(self):
+        text = "یادآوری کن که آقای امیری جلسه جوجه خوری در ساعت ۵:۳۰ روز ۳۰ فروردین را لغو کردند."
+        name =  "جوجه خوری"
+        task_type = "cancelation"
+        time = "ساعت ۵:۳۰ ۳۰ فروردین"
+        periodicity = ""
+        is_done = False
+        is_cancelled = True
+        self.check(text, name, task_type, time, periodicity, is_done, is_cancelled)
+        pass
+
+class check_done(unittest.TestCase):
+    def __init__(self, methodName: str = "runTest") -> None:
+        self.task_extractor = TaskExtractor()
+        super().__init__(methodName)
+    def check(self, text, name, task_type, time, periodicity, is_done, is_cancelled):
+        self.task_extractor.run(text)
+        self.assertEqual(self.task_extractor.tasks[0].name, name, "TASK NAME DIDN'T MATCH!")
+        self.assertEqual(self.task_extractor.tasks[0].task_type, task_type, "TASK TYPE DIDN'T MATCH")
+        self.assertEqual(self.task_extractor.tasks[0].time, time, "TIMES DIDN'T MATCH")
+        self.assertEqual(self.task_extractor.tasks[0].periodicity, periodicity, "PERIODICITIES DIDN'T MATCH")
+        self.assertEqual(self.task_extractor.tasks[0].is_done, is_done,"IS_DONE WRONG!")
+        self.assertEqual(self.task_extractor.tasks[0].is_cancelled, is_cancelled, "IS_CANCELLED WRONG!")
+    def test_1(self):
+        text = "کار ساختن بات انجام شد."
+        name =  "ساختن بات"
+        task_type = "done"
+        time = ""
+        periodicity = ""
+        is_done = True
+        is_cancelled = False
+        self.check(text, name, task_type, time, periodicity, is_done, is_cancelled)
+        pass
+    def test_2(self):
+        text = "من و اقا رضا پنجنشبه تسک خوردن بستنی را تمام کردیم."
+        name =  "خوردن بستنی"
+        task_type = "done"
+        time = "پنجشنبه"
+        periodicity = ""
+        is_done = True
+        is_cancelled = False
+        self.check(text, name, task_type, time, periodicity, is_done, is_cancelled)
+        pass
+    def test_3(self):
+        text = "جلسه ختم مرحوم مغفور با موفقیت تمام شد."
+        name =  "ختم مرحوم مغفور"
+        task_type = "done"
+        time = ""
+        periodicity = ""
+        is_done = True
+        is_cancelled = False
+        self.check(text, name, task_type, time, periodicity, is_done, is_cancelled)
+        pass
+    def test_4(self):
+        text = "آخر هفته من و آقای امیری به استادیوم رفتیم و وظیفه نظارت بر بازی را انجام دادیم."
+        name =  "نظارت بر بازی"
+        task_type = "done"
+        time = "آخر هفته"
+        periodicity = ""
+        is_done = True
+        is_cancelled = False
+        self.check(text, name, task_type, time, periodicity, is_done, is_cancelled)
+        pass
+    def test_5(self):
+        text = "کار ساختن بات متاسفانه تمام نشد."
+        name =  "ساختن بات"
+        task_type = "done"
+        time = ""
+        periodicity = ""
+        is_done = False
+        is_cancelled = False
+        self.check(text, name, task_type, time, periodicity, is_done, is_cancelled)
+        pass
+
+class check_change(unittest.TestCase):
+    def __init__(self, methodName: str = "runTest") -> None:
+        self.task_extractor = TaskExtractor()
+        super().__init__(methodName)
+    def check(self, text, name, task_type, time, periodicity, is_done, is_cancelled):
+        self.task_extractor.run(text)
+        self.assertEqual(self.task_extractor.tasks[0].name, name, "TASK NAME DIDN'T MATCH!")
+        self.assertEqual(self.task_extractor.tasks[0].task_type, task_type, "TASK TYPE DIDN'T MATCH")
+        self.assertEqual(self.task_extractor.tasks[0].time, time, "TIMES DIDN'T MATCH")
+        self.assertEqual(self.task_extractor.tasks[0].periodicity, periodicity, "PERIODICITIES DIDN'T MATCH")
+        self.assertEqual(self.task_extractor.tasks[0].is_done, is_done,"IS_DONE WRONG!")
+        self.assertEqual(self.task_extractor.tasks[0].is_cancelled, is_cancelled, "IS_CANCELLED WRONG!")
+    def test_1(self):
+        text = "زمان جلسه اسکرام را به ساعت ۵:۲۴ تغییر بده"
+        name =  "اسکرام"
+        task_type = "change"
+        time = "ساعت ۵:۲۴"
+        periodicity = ""
+        is_done = False
+        is_cancelled = False
+        self.check(text, name, task_type, time, periodicity, is_done, is_cancelled)
+        pass
+    def test_2(self):
+        text = "کار بانجی جامپینگ را به روز ۲۴ اردیبهشت به تعویق بینداز."
+        name =  "بانجی جامپینگ"
+        task_type = "change"
+        time = "۲۴ اردیبهشت"
+        periodicity = ""
+        is_done = False
+        is_cancelled = False
+        self.check(text, name, task_type, time, periodicity, is_done, is_cancelled)
+        pass
+    def test_3(self):
+        text = "ساعت تسک یوگا را به ۱۲ ظهر شنبه تغییر بده."
+        name =  "یوگا"
+        task_type = "change"
+        time = "۱۲ ظهر شنبه"
+        periodicity = ""
+        is_done = False
+        is_cancelled = False
+        self.check(text, name, task_type, time, periodicity, is_done, is_cancelled)
+        pass
+    def test_4(self):
+        text = "برنامه عبدالمجید رااز روز ۲۳ فروردین به روز ۲۵ خرداد ساعت ۳:۰۱ به تاخیر بینداز"
+        name =  "برنامه عبدالمجید"
+        task_type = "change"
+        time = "۲۵ خرداد ساعت ۳:۰۱"
+        periodicity = ""
+        is_done = False
+        is_cancelled = False
+        self.check(text, name, task_type, time, periodicity, is_done, is_cancelled)
+        pass
+    def test_5(self):
+        text = "زمان بازی هاکی را به ساعت ۶ عصر تغییر بده."
+        name =  "بازی هاکی"
+        task_type = "change"
+        time = "ساعت ۶ عصر"
+        periodicity = ""
+        is_done = False
+        is_cancelled = False
+        self.check(text, name, task_type, time, periodicity, is_done, is_cancelled)
+        pass
+    def test_6(self):
+        text = "کار بانجی جامپینگ را به روز ۲۴ اردیبهشت تغییر بده."
+        name =  "بانجی جامپینگ"
+        task_type = "change"
+        time = "۲۴ اردیبهشت"
         periodicity = ""
         is_done = False
         is_cancelled = False
