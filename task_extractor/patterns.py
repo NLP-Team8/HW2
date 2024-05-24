@@ -119,6 +119,7 @@ class Patterns:
 
         ]
         RETURNS = [
+            f"(?:(?P<PERIOD>{SAAT_REGEX}){ADP}?{RETURN_REGEX}.*)",
             f"(?:(?P<PERIOD>{PERIOD_REGEX}){ADP}?{RETURN_REGEX}.*)",
             f"(?:.*{RETURN_REGEX}.*)",
         ]
@@ -148,7 +149,7 @@ class Patterns:
         CANCELLATIONS = [f"(?:.*{CANCEL_REGEX})"]
         DONES = [f"(?:{TASK}{ADP}?.*{AGG_WORDS(ANY, END_WORDS)}{PAST_VERBS})"]
         CHANGED = [
-            f"(?:{TASK}{ADP}?{ADP}?{ADP}?{ADV}?{DAY_NIGHT}?(?P<NEW_DATE>{SAAT_REGEX}){ADP}?{AGG_WORDS(ANY, CHANGE_WORDS)})",
+             f"(?:{TASK}{ADP}?{ADP}?{ADP}?{ADV}?{DAY_NIGHT}?(?P<NEW_DATE>{SAAT_REGEX}){ADP}?{AGG_WORDS(ANY, CHANGE_WORDS)})",
             f"(?:{TASK}{ADP}?{ADP}?{NOUN}?{ADP}?{ADV}?{DAY_NIGHT}?(?P<NEW_DATE>{SAAT_REGEX}){ADP}?{AGG_WORDS(ANY, CHANGE_WORDS)})",
             f"(?:{TASK}{ADP}?{ADP}?{ADV}?{DAY_NIGHT}?(?P<OLD_DATE>{SAAT_REGEX}){ADP}?{DET}?{ADV}?{DAY_NIGHT}?(?P<NEW_DATE>{SAAT_REGEX}){ADP}?{AGG_WORDS(ANY, CHANGE_WORDS)})",
         ]
