@@ -3,9 +3,9 @@ from opsdroid.matchers import match_regex
 from task_extractor.extractor import TaskExtractor
 import sqlite3
 
-class HelloSkill(Skill):
+class MainSkill(Skill):
     def __init__(self, opsdroid, config):
-        super(HelloSkill, self).__init__(opsdroid, config)
+        super(MainSkill, self).__init__(opsdroid, config)
         self.db_file = config.get("database", "opsdroid.db")
         self.con = sqlite3.connect(self.db_file)
         self.cur = self.con.cursor()
