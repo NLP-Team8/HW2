@@ -56,7 +56,7 @@ class checkAdd(unittest.TestCase):
         name = "جلسه اسکرام"
         task_type = "add"
         time =  "ساعت ۸ صبح"
-        periodicity = "هر روز"
+        periodicity = "روزانه"
         is_done = False
         is_cancelled = False
         self.check(text, name, task_type, time, periodicity, is_done, is_cancelled)
@@ -253,7 +253,7 @@ class check_cancell(unittest.TestCase):
         self.check(text, name, task_type, time, periodicity, is_done, is_cancelled)
         pass
     def test_11(self):
-        text = "یادآوری کن که آقای امیری جلسه جوجه خوری در ساعت ۵:۳۰ روز ۳۰ فروردین را لغو کردند."
+        text = "یادآوری کن که آقای امیری جلسه جوجه خوری در ساعت ۵:۳۰  ۳۰ فروردین را لغو کردند."
         name =  "جوجه خوری"
         task_type = "cancelation"
         time = "ساعت ۵:۳۰ ۳۰ فروردین"

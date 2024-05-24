@@ -63,10 +63,18 @@ class TaskExtractor:
     def parse_period(self, task, groups):
 
         if 'PERIOD' in groups:
-            
-            
             task.time = ' '.join(self.lemmatizer.lemmatize(word) for word, tag in groups['PERIOD'])
-            
+
+    def normalize_period(self, periodicity):
+        if periodicity == 'هر روز' or periodicity == 'هرروز':
+            periodicity = 'روزانه'
+        elif periodicity == 'هر هفته' or periodicity == 'هرهفته':
+            periodicity = 'هفتگی'
+        elif periodicity == 'هر ماه' or periodicity == 'هرماه':
+            periodicity = 'ماهانه'
+        elif periodicity == 'هر سال' or periodicity == 'هرسال':
+            periodicity = 'سالانه'
+        return periodicity   
             
 
     def parse_periodicity(self, task, groups):
@@ -157,59 +165,9 @@ class TaskExtractor:
                 if result:
                     matches, groups = result
                     self.tasks[-1].is_done = True
+
+        for task in self.tasks:
+            task.periodicity = self.normalize_period(task.periodicity)
+            task.time = self.normalize_period(task.time)
         return self.tasks
     
-class EventExtractor:
-    normalizer = hazm.Normalizer()
-    sent_tokenizer = hazm.SentenceTokenizer()
-    word_tokenizer = hazm.WordTokenizer()
-    POS_tagger = hazm.POSTagger(model='models/pos_tagger.model')
-    lemmatizer = hazm.Lemmatizer()
-    patterns = Patterns()
-
-    def __init__(self):
-        self.events = []
-
-    def parse_event_name(self, groups):
-        return ' '.join(word for word, tag in groups['NAME'])
-
-    def parse_datetime(self, event, groups, date_type):
-        if date_type in groups:
-            datetime_str = ' '.join(word for word, tag in groups[date_type])
-            setattr(event, date_type, datetime_str)
-        else:
-            setattr(event, date_type, None)
-
-    def parse_period(self, event, groups):
-        event.period = ' '.join(word for word, tag in groups['PERIODICITY'])
-
-    def run(self, text: str) -> list[Event]:
-        text = self.normalizer.normalize(text)
-        sentences = self.sent_tokenizer.tokenize(text)
-        for sentence in sentences:
-            print(sentence)
-            words = self.word_tokenizer.tokenize(sentence)
-            tags = self.POS_tagger.tag(words)
-            tags = [tag for tag in tags if tag[1] != 'PUNCT']
-
-            for pattern_type in ['DECLARATIONS', 'ASSIGNMENTS', 'UPDATE_START_DATES', 'UPDATE_DEADLINES', 'CANCELLATIONS', 'DONES']:
-                for pattern in self.patterns[pattern_type]:
-                    result = pattern.parse(tags)
-                    print(pattern)
-                    if result:
-                        matches, groups = result
-                        event = Event()
-                        if 'NAME' in groups:
-                            event.name = self.parse_event_name(groups)
-                        if 'START_DATE' in groups:
-                            self.parse_datetime(event, groups, 'START_DATE')
-                        if 'END_DATE' in groups:
-                            self.parse_datetime(event, groups, 'END_DATE')
-                        if 'PERIODICITY' in groups:
-                            self.parse_period(event, groups)
-                        if pattern_type == 'DONES':
-                            event.is_done = True
-                        if pattern_type == 'CANCELLATIONS':
-                            event.is_cancelled = True
-                        self.events.append(event)
-        return self.events
