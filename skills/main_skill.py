@@ -23,7 +23,7 @@ class MainSkill(Skill):
             return
         if message.text.strip() == 'راهنما':
             response_text = '''
-با استفاده از پیامی مانند "یادم باشه کتاب را ساعت 8:0 روز 5 تیر بخوانم. می‌توانید تسک‌ اضافه کنید.
+با استفاده از پیامی مانند "یادم باشه کتاب را ساعت 8:0  5 تیر بخوانم. می‌توانید تسک‌ اضافه کنید.
 با پیامی مانند تسک کتاب را کنسل بکن می‌توانید تسک را کنسل کنید.
 با پیامی مانند تسک کتاب تمام شد نیز می‌توانید اتمام تسک را به برنامه اضافه کنید.
 می‌توانید زمان یک تسک را نیز با گفتن دوباره آن با زمان جدید عوض کنید.
@@ -36,6 +36,11 @@ class MainSkill(Skill):
         extractor.run(message.text)
 
         for task in extractor.tasks:
+            if task.task_type == "return":
+                task.periodicity = task.time
+            self.normalize_period(task)
+
+
             if task.task_type == "cancelation":
                 self.cancel_task(task, message.user)
             if task.task_type == "done":
@@ -43,14 +48,10 @@ class MainSkill(Skill):
             if task.task_type == "change":
                 self.change_task_time(task, message.user)
             if task.task_type == "return":
-                if len(task.time.strip()) == 0 and len(task.periodicity.strip()) == 0:
+                if len(task.periodicity.strip()) == 0:
                     res = self.cur.execute(f"SELECT * FROM tasks WHERE user='{message.user}'").fetchall()
-                elif len(task.time.strip()) == 0:
-                    res = self.cur.execute(f"SELECT * FROM tasks WHERE user='{message.user}' AND period='{task.periodicity}'").fetchall()
-                elif len(task.periodicity.strip()) == 0:
-                    res = self.cur.execute(f"SELECT * FROM tasks WHERE user='{message.user}' AND time='{task.time}'").fetchall()
                 else:
-                    res = self.cur.execute(f"SELECT * FROM tasks WHERE user='{message.user}' AND time='{task.time}' AND period='{task.periodicity}'").fetchall()
+                    res = self.cur.execute(f"SELECT * FROM tasks WHERE user='{message.user}' AND time='{task.periodicity}' OR period='{task.periodicity}'").fetchall()
                 await message.respond(str(res))
             if task.task_type == "add":
                 self.add_task(task, message.user)
@@ -65,6 +66,16 @@ class MainSkill(Skill):
         response_text += ']'
         if has_non_return_type:
             await message.respond(response_text)
+
+    def normalize_period(self, task):
+        if task.periodicity == 'هر روز' or task.periodicity == 'هرروز':
+            task.periodicity = 'روزانه'
+        elif task.periodicity == 'هر هفته' or task.periodicity == 'هرهفته':
+            task.periodicity = 'هفتگی'
+        elif task.periodicity == 'هر ماه' or task.periodicity == 'هرماه':
+            task.periodicity = 'ماهانه'
+        elif task.periodicity == 'هر سال' or task.periodicity == 'هرسال':
+            task.periodicity = 'سالانه'
     
     def add_task(self, task, username):
         username, name, time, period, done, cancel = username, task.name, task.time, task.periodicity, int(task.is_done), int(task.is_cancelled)
