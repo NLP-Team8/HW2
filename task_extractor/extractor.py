@@ -71,7 +71,7 @@ class TaskExtractor:
 
     def parse_periodicity(self, task, groups):
         if 'PERIODICITY' in groups:
-            task.periodicity = ' '.join(word for word, tag in groups['PERIODICITY'])
+            task.periodicity = ' '.join(self.lemmatizer.lemmatize(word) for word, tag in groups['PERIODICITY'])
     
     def parse_end_date(self, task, groups):
         if 'END_DATE' in groups:
@@ -88,17 +88,7 @@ class TaskExtractor:
             tags = self.POS_tagger.tag(words)
             tags = [tag for tag in tags if tag[1] != 'PUNCT']
 
-            for pattern in self.patterns['RETURNS']:
-                result = pattern.parse(tags)
-                # print(tags)
-                # print(result)
-                if result:
-                    matches, groups = result
-                    task = Task()
-                    self.parse_period(task, groups)
-                    self.tasks.append(task)
-                    task.task_type = "return"
-                    break
+            
 
             for pattern in self.patterns['DECLARATIONS']:
                 result = pattern.parse(tags)
@@ -116,10 +106,25 @@ class TaskExtractor:
                     self.parse_periodicity(task, groups)
                     self.tasks.append(task)
                     break
-            if not self.tasks:
-                continue
 
             
+                
+            if not self.tasks:
+                for pattern in self.patterns['RETURNS']:
+                    result = pattern.parse(tags)
+                    # print(tags)
+                    # print(result)
+                    if result:
+                        matches, groups = result
+                        task = Task()
+                        self.parse_period(task, groups)
+                        self.tasks.append(task)
+                        task.task_type = "return"
+                        break
+                
+
+            if not self.tasks:
+                continue
 
 
             
@@ -139,11 +144,12 @@ class TaskExtractor:
 
             for pattern in self.patterns['CHANGED']:
                 result = pattern.parse(tags)
-              
+                # print(result)
                 if result:
                     matches, groups = result
                     self.parse_new_date(self.tasks[-1], groups)
                     task.task_type = 'change'
+                    break
                     
 
             for pattern in self.patterns.DONES:
