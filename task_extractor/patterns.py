@@ -30,7 +30,7 @@ class Patterns:
         DAY_NIGHT = f"(?:{AGG_WORDS('NOUN', [ 'صبح', 'شب', 'عصر', 'ظهر', 'روز'])})"
         DAYS = f"(?:{AGG_WORDS('NOUN', ['شنبه', 'یکشنبه', 'دوشنبه', 'سهشنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه'])})" 
         DAYS2 = f"(?:{AGG_WORDS(ANY, ['فردا', 'امروز', 'امشب'])})"
-        DATE = f"(?:{DAYS2}|{NUM_GROUP}{MONTH}|{DAYS})"
+        DATE = f"(?:{DAYS2}|{NUM_GROUP}{MONTH}|{DAYS}|{MONTH})"
         DATETIME = f"(?:{DATE}{TIME}|{TIME}{DATE}|{DATE}|{TIME})"
         SAAT_REGEX = f"(?:{SAAT_WORD}{TIME}{DAY_NIGHT}?{DATE}|{SAAT_WORD}{TIME}{DATE}|{DATE}{SAAT_WORD}?{TIME}{DAY_NIGHT}|{DATE}{SAAT_WORD}{TIME}{DAY_NIGHT}?|{SAAT_WORD}{TIME}{DAY_NIGHT}?|{SAAT_WORD}?{TIME}{DAY_NIGHT}?{DATE}|{DATE}{TIME}{DAY_NIGHT}?|{DATE}|{SAAT_WORD}?{TIME})"
         
