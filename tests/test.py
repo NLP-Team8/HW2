@@ -107,8 +107,8 @@ class checkAdd(unittest.TestCase):
         pass
     ######## 9 ############
     def test_9(self):
-        text = "یادم باشه وظیفه شستن ماشین رو آخر هفته تموم کنم."
-        name =  "شستن ماشین"
+        text = "یادم باشه وظیفه شستن لباس‌ها رو آخر هفته تموم کنم."
+        name =  "شستن لباس‌ها"
         task_type = "add"
         time = ""
         periodicity = "آخر هفته"
@@ -173,8 +173,8 @@ class check_cancell(unittest.TestCase):
         self.check(text, name, task_type, time, periodicity, is_done, is_cancelled)
         pass
     def test_3(self):
-        text = "کار طی زدن زمین به حول و قوه الهی کنسل شد."
-        name =  "طی زدن زمین"
+        text = "کار شخم زدن زمین به حول و قوه الهی کنسل شد."
+        name =  "شخم زدن زمین"
         task_type = "cancelation"
         time = ""
         periodicity = ""
@@ -183,8 +183,8 @@ class check_cancell(unittest.TestCase):
         self.check(text, name, task_type, time, periodicity, is_done, is_cancelled)
         pass
     def test_4(self):
-        text = "تسک طی زدن زمین کنسل شد."
-        name =  "طی زدن زمین"
+        text = "تسک شخم زدن زمین کنسل شد."
+        name =  "شخم زدن زمین"
         task_type = "cancelation"
         time = ""
         periodicity = ""
@@ -223,13 +223,13 @@ class check_cancell(unittest.TestCase):
         self.check(text, name, task_type, time, periodicity, is_done, is_cancelled)
         pass
     def test_8(self):
-        text = "کار بیگاری را کنسل نکن."
+        text = "کار بیگاری را کنسل کن."
         name =  "بیگاری"
         task_type = "cancelation"
         time = ""
         periodicity = ""
         is_done = False
-        is_cancelled = False
+        is_cancelled = True
         self.check(text, name, task_type, time, periodicity, is_done, is_cancelled)
         pass
     def test_9(self):
@@ -286,7 +286,7 @@ class check_done(unittest.TestCase):
         self.check(text, name, task_type, time, periodicity, is_done, is_cancelled)
         pass
     def test_2(self):
-        text = "من و اقا رضا پنجنشبه تسک خوردن بستنی را تمام کردیم."
+        text = "من و اقا رضا پنجشنبه تسک خوردن بستنی را تمام کردیم."
         name =  "خوردن بستنی"
         task_type = "done"
         time = "پنجشنبه"
@@ -306,8 +306,8 @@ class check_done(unittest.TestCase):
         self.check(text, name, task_type, time, periodicity, is_done, is_cancelled)
         pass
     def test_4(self):
-        text = "آخر هفته من و آقای امیری به استادیوم رفتیم و وظیفه نظارت بر بازی را انجام دادیم."
-        name =  "نظارت بر بازی"
+        text = "آخر هفته وظیفه نظارت کردن بازی را انجام دادیم."
+        name =  "نظارت کردن بازی"
         task_type = "done"
         time = "آخر هفته"
         periodicity = ""
@@ -316,12 +316,12 @@ class check_done(unittest.TestCase):
         self.check(text, name, task_type, time, periodicity, is_done, is_cancelled)
         pass
     def test_5(self):
-        text = "کار ساختن بات متاسفانه تمام نشد."
+        text = "کار ساختن بات خوشبختانه تمام شد."
         name =  "ساختن بات"
         task_type = "done"
         time = ""
         periodicity = ""
-        is_done = False
+        is_done = True
         is_cancelled = False
         self.check(text, name, task_type, time, periodicity, is_done, is_cancelled)
         pass
@@ -369,8 +369,8 @@ class check_change(unittest.TestCase):
         self.check(text, name, task_type, time, periodicity, is_done, is_cancelled)
         pass
     def test_4(self):
-        text = "برنامه عبدالمجید رااز روز ۲۳ فروردین به روز ۲۵ خرداد ساعت ۳:۰۱ به تاخیر بینداز"
-        name =  "برنامه عبدالمجید"
+        text = "کار شستن عبدالمجید را از روز ۲۳ فروردین به روز ۲۵ خرداد ساعت ۳:۰۱ به تاخیر بینداز"
+        name =  "شستن عبدالمجید"
         task_type = "change"
         time = "۲۵ خرداد ساعت ۳:۰۱"
         periodicity = ""
@@ -380,7 +380,7 @@ class check_change(unittest.TestCase):
         pass
     def test_5(self):
         text = "زمان بازی هاکی را به ساعت ۶ عصر تغییر بده."
-        name =  "بازی هاکی"
+        name =  "هاکی"
         task_type = "change"
         time = "ساعت ۶ عصر"
         periodicity = ""
