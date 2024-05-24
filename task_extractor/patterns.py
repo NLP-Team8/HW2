@@ -32,7 +32,7 @@ class Patterns:
         DAYS2 = f"(?:{AGG_WORDS(ANY, ['فردا', 'امروز', 'امشب'])})"
         DATE = f"(?:{DAYS2}|{NUM_GROUP}{MONTH}|{DAYS})"
         DATETIME = f"(?:{DATE}{TIME}|{TIME}{DATE}|{DATE}|{TIME})"
-        SAAT_REGEX = f"(?:{SAAT_WORD}{TIME}{DAY_NIGHT}?{DATE}|{SAAT_WORD}{TIME}{DATE}|{DATE}{SAAT_WORD}?{TIME}{DAY_NIGHT}|{DATE}{SAAT_WORD}{TIME}{DAY_NIGHT}?|{SAAT_WORD}{TIME}{DAY_NIGHT}?|{SAAT_WORD}?{TIME}{DAY_NIGHT}?{DATE}|{DATE}?{TIME}{DAY_NIGHT}?|{DATE}|{SAAT_WORD}?{TIME})"
+        SAAT_REGEX = f"(?:{SAAT_WORD}{TIME}{DAY_NIGHT}?{DATE}|{SAAT_WORD}{TIME}{DATE}|{DATE}{SAAT_WORD}?{TIME}{DAY_NIGHT}|{DATE}{SAAT_WORD}{TIME}{DAY_NIGHT}?|{SAAT_WORD}{TIME}{DAY_NIGHT}?|{SAAT_WORD}?{TIME}{DAY_NIGHT}?{DATE}|{DATE}{TIME}{DAY_NIGHT}?|{DATE}|{SAAT_WORD}?{TIME})"
         
         TASK_WORDS = ['وظیفه', 'تسک', 'کار', 'جلسه', 'بازی' , 'رویداد']
         # PERIODICITY_WORDS= ['هر روز', 'دو روز یک بار', 'سه روز یکبار', 'روز زوج' ,'روز‌های زوج', 'روز های زوج', 'روز فرد', 'روز های فرد', 'روز‌های فرد', 'آخر هفته', 'اخر هفته', 'اخر هفته‌ها', 'اخر هفته‌ ها', 'آخر هفته‌ ها' ]
