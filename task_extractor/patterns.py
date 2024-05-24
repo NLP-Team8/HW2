@@ -35,7 +35,6 @@ class Patterns:
         SAAT_REGEX = f"(?:{SAAT_WORD}{TIME}{DAY_NIGHT}?{DATE}|{SAAT_WORD}{TIME}{DATE}|{DATE}{SAAT_WORD}?{TIME}{DAY_NIGHT}|{DATE}{SAAT_WORD}{TIME}{DAY_NIGHT}?|{SAAT_WORD}{TIME}{DAY_NIGHT}?|{SAAT_WORD}?{TIME}{DAY_NIGHT}?{DATE}|{DATE}{TIME}{DAY_NIGHT}?|{DATE}|{SAAT_WORD}?{TIME})"
         
         TASK_WORDS = ['وظیفه', 'تسک', 'کار', 'جلسه', 'بازی' , 'رویداد']
-        # PERIODICITY_WORDS= ['هر روز', 'دو روز یک بار', 'سه روز یکبار', 'روز زوج' ,'روز‌های زوج', 'روز های زوج', 'روز فرد', 'روز های فرد', 'روز‌های فرد', 'آخر هفته', 'اخر هفته', 'اخر هفته‌ها', 'اخر هفته‌ ها', 'آخر هفته‌ ها' ]
         PERIODICITY_WORDS = ['روز', 'هفته', 'روز\u200cهای', 'شب', 'ماه', 'روزانه', 'روزانه\u200cام']
         PERIODICITY_REGEX = f"(?:{DET}?{NUM}?{ADJ}?{AGG_WORDS(ANY, PERIODICITY_WORDS)}{NUM}?{ADV}?{ADJ}?{ADJECTIVES}?)"
 
@@ -51,7 +50,6 @@ class Patterns:
         CANCEL_REGEX = f"(?:{AGG_WORDS('NOUN', CANCEL_WORDS)}(?P<CANCEL>{VP}))"
         REMINDER_REGEX = f"(?:{AGG_WORDS('NOUN', REMINDER_WORDS)}(?P<REMIND>{VP}))"
         RETURN_REGEX = f"(?:{AGG_WORDS(ANY, RETURN_WORDS)})"
-        # CHANGE_REGEX = f"(?:{AGG_WORDS('NOUN', CHANGE_WORDS)}(?P<CHANGE>{VP}))"
         END_WORDS = ['پایان', 'تمام','تموم', 'انجام', 'تحویل', 'تمدید']
         PAST = ['شد', 'یافت', 'گشت', 'داده\u200cشد', 'کردم', 'کرد', 'کردیم', 'دادیم', 'داد']
         PAST_VERBS = f"(?:{AGG_WORDS(ANY,PAST)})"
@@ -63,11 +61,6 @@ class Patterns:
         TASKREVERSE4 = f"(?:{AGG_WORDS(ANY,REMINDER_WORDS)}{SCONJ}?{ADP}?(?P<PERIODICITY>{PERIODICITY_REGEX})(?P<START_DATE>{SAAT_REGEX}){ADP}?(?P<NAME>{NP}))"
         TASKREVERSE5 = f"(?:{AGG_WORDS(ANY,REMINDER_WORDS)}(?P<REMIND>{VP}|{NOUN}){SCONJ}?{ADP}?(?P<START_DATE>{SAAT_REGEX}){ADP}?(?P<NAME>{NP}))"
         DECLARATIONS = [
-            # f"(?:{TASK}{ADP}+(?P<START_DATE>{DATETIME}){AGG_WORDS(ANY, START_WORDS)}{VERB}{ANY_T}+{ADP}+(?P<END_DATE>{DATETIME}){AGG_WORDS(ANY, END_WORDS)}{VERB})",
-            # f"(?:{TASK}{ADP}?{VERB}{ADP}?(?P<START_DATE>{DATETIME}){AGG_WORDS(ANY, START_WORDS)}{VERB})",
-            # f"(?:{TASK}{ADP}?{VERB}{ADP}?(?P<END_DATE>{DATETIME}){AGG_WORDS(ANY, END_WORDS)}{VERB})",
-            # f"(?:(?P<ASSIGNEES>{NP_GROUP}){AGG_WORDS(ANY, ASSIGNEE_WORDS)}{TASK}{VERB})",
-            # f"(?:{AGG_WORDS(ANY, ASSIGNEE_WORDS)}{TASK}{ADP}?(?P<ASSIGNEES>{NP_GROUP}){VERB})",
             f"(?:{TASKREVERSE3}{ADP}?{ADP}?{AGG_WORDS(ANY, START_WORDS)})",
             f"(?:{TASKREVERSE3}{ADP}?{ADP}?{VERB})",
 
@@ -123,29 +116,8 @@ class Patterns:
             f"(?:(?P<PERIOD>{PERIOD_REGEX}){ADP}?{RETURN_REGEX}.*)",
             f"(?:.*{RETURN_REGEX}.*)",
         ]
-        ASSIGNMENTS = [
-            f"{AGG_WORDS(ANY, ASSIGNEE_WORDS)}{NP}*(?P<ASSIGNEES>{NP_GROUP}){VERB}",
-            f"(?P<ASSIGNEES>{NP_GROUP}){AGG_WORDS(ANY, ASSIGNEE_WORDS)}{NP}*{VERB}",
-        ]
-        UPDATE_START_DATES = [
-            f"(?:{AGG_WORDS(ANY, START_WORDS)}{AGG_WORDS('NOUN', TASK_WORDS)}{NP}?{ADP}+(?P<START_DATE>{DATETIME}){VP})",
-            f"(?:{AGG_WORDS(ANY, START_WORDS)}{NP}?{AGG_WORDS('NOUN', TASK_WORDS)}{ADP}+(?P<START_DATE>{DATETIME}){VP})",
-            f"(?:(?P<START_DATE>{DATETIME}){NP}?{ADP}+{AGG_WORDS(ANY, START_WORDS)}{VERB})",
-            f"(?:{DET}?{AGG_WORDS('NOUN', TASK_WORDS)}{NP}?{ADP}+(?P<START_DATE>{DATETIME}){AGG_WORDS(ANY, START_WORDS)}{VERB})"
-        ]
-        UPDATE_DEADLINES = [
-            f"(?:{AGG_WORDS(ANY, ['مهلت', 'ددلاین'])}{DET}?{AGG_WORDS('NOUN', TASK_WORDS)}{NP}?{ADP}*(?P<END_DATE>{DATETIME}){VP})",
-            f"(?:{DET}?{AGG_WORDS('NOUN', TASK_WORDS)}{NP}?{ADP}+(?P<END_DATE>{DATETIME}){AGG_WORDS(ANY, END_WORDS)}{VERB})",
-            f"(?:{AGG_WORDS(ANY, END_WORDS)}{DET}?{AGG_WORDS('NOUN', TASK_WORDS)}{NP}?{ADP}*(?P<END_DATE>{DATETIME}){VERB})",
-        ]
-        # DONES = [
-        #     f"(?:{AGG_WORDS('NOUN', TASK_WORDS)}{ADP}?{NP}?{AGG_WORDS(ANY, END_WORDS)}{VERB})"
-        # ]
-        SUBTASK = f"(?P<SUBTASKS>{AGG_WORDS(ANY, ['ابتدا', 'اول'])}?{ANY_T}+(?:{CCONJ}{AGG_WORDS(ANY, ['سپس', 'بعد'])}{ANY_T}+)+)"
-        SUBTASK_DECLARATIONS = [
-            f"(?:{ADP}{NP}{VERB}{SUBTASK})",
-            f"(?:{AGG_WORDS('NOUN', TASK_WORDS)}{NP}?{AGG_WORDS(ANY, ['شامل', 'متشکل'])}{ADP}?{SUBTASK}{VERB})",
-        ]
+
+    
         CANCELLATIONS = [f"(?:.*{CANCEL_REGEX})"]
         DONES = [f"(?:{TASK}{ADP}?.*{AGG_WORDS(ANY, END_WORDS)}{PAST_VERBS})"]
         CHANGED = [

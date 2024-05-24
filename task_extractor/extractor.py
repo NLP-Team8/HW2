@@ -16,17 +16,6 @@ class Task:
     def __repr__(self):
         return json.dumps(self.__dict__, indent=4, ensure_ascii=False)
     
-class Event:
-    def __init__(self):
-        self.name = ''
-        self.start_date = ''
-        self.end_date = ''
-        self.new_date = ''
-        self.is_done = False
-        self.is_cancelled = False
-
-    def __repr__(self):
-        return json.dumps(self.__dict__, indent=4, ensure_ascii=False)
 
 class TaskExtractor:
     normalizer = hazm.Normalizer()
