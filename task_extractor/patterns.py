@@ -34,7 +34,7 @@ class Patterns:
         DATETIME = f"(?:{DATE}{TIME}|{TIME}{DATE}|{DATE}|{TIME})"
         SAAT_REGEX = f"(?:{SAAT_WORD}{TIME}{DAY_NIGHT}?{DATE}|{SAAT_WORD}{TIME}{DATE}|{DATE}{SAAT_WORD}?{TIME}{DAY_NIGHT}|{DATE}{SAAT_WORD}{TIME}{DAY_NIGHT}?|{SAAT_WORD}{TIME}{DAY_NIGHT}?|{SAAT_WORD}?{TIME}{DAY_NIGHT}?{DATE}|{DATE}?{TIME}{DAY_NIGHT}?|{DATE}|{SAAT_WORD}?{TIME})"
         
-        TASK_WORDS = ['وظیفه', 'تسک', 'کار', 'جلسه', 'بازی' , 'رویداد', 'برنامه']
+        TASK_WORDS = ['وظیفه', 'تسک', 'کار', 'جلسه', 'بازی' , 'رویداد']
         # PERIODICITY_WORDS= ['هر روز', 'دو روز یک بار', 'سه روز یکبار', 'روز زوج' ,'روز‌های زوج', 'روز های زوج', 'روز فرد', 'روز های فرد', 'روز‌های فرد', 'آخر هفته', 'اخر هفته', 'اخر هفته‌ها', 'اخر هفته‌ ها', 'آخر هفته‌ ها' ]
         PERIODICITY_WORDS = ['روز', 'هفته', 'روز\u200cهای', 'شب', 'ماه', 'روزانه', 'روزانه\u200cام']
         PERIODICITY_REGEX = f"(?:{DET}?{NUM}?{ADJ}?{AGG_WORDS(ANY, PERIODICITY_WORDS)}{NUM}?{ADV}?{ADJ}?{ADJECTIVES}?)"
