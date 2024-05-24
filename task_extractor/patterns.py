@@ -32,10 +32,10 @@ class Patterns:
         DAYS2 = f"(?:{AGG_WORDS('ADV', ['فردا', 'امروز', 'امشب', ])}|{AGG_WORDS('NOUN', ['فردا', 'امروز', 'امشب', ])})"
         DATE = f"(?:{NUM_GROUP}{MONTH}|{DAYS}|{DAYS2})"
         DATETIME = f"(?:{DATE}{TIME}|{TIME}{DATE}|{DATE}|{TIME})"
-        SAAT_REGEX = f"(?:{SAAT_WORD}{TIME}{DAY_NIGHT}?{DATE}|{DATE}{SAAT_WORD}?{TIME}{DAY_NIGHT}|{DATE}{SAAT_WORD}{TIME}{DAY_NIGHT}?|{SAAT_WORD}{TIME}{DAY_NIGHT}?|{TIME}{DAY_NIGHT}|{DATE}|{TIME})"
+        SAAT_REGEX = f"(?:{SAAT_WORD}{TIME}{DAY_NIGHT}?{DATE}|{SAAT_WORD}{TIME}{DATE}|{DATE}{SAAT_WORD}?{TIME}{DAY_NIGHT}|{DATE}{SAAT_WORD}{TIME}{DAY_NIGHT}?|{SAAT_WORD}{TIME}{DAY_NIGHT}?|{SAAT_WORD}?{TIME}{DAY_NIGHT}?{DATE}|{TIME}{DAY_NIGHT}|{DATE}|{TIME})"
         TASK_WORDS = ['وظیفه', 'تسک', 'کار', 'جلسه']
         # PERIODICITY_WORDS= ['هر روز', 'دو روز یک بار', 'سه روز یکبار', 'روز زوج' ,'روز‌های زوج', 'روز های زوج', 'روز فرد', 'روز های فرد', 'روز‌های فرد', 'آخر هفته', 'اخر هفته', 'اخر هفته‌ها', 'اخر هفته‌ ها', 'آخر هفته‌ ها' ]
-        PERIODICITY_WORDS = ['روز', 'هفته', 'روز\u200cهای', 'ساعت', 'شب', 'ماه' ]
+        PERIODICITY_WORDS = ['روز', 'هفته', 'روز\u200cهای', 'شب', 'ماه' ]
         PERIODICITY_REGEX = f"(?:{DET}?{NUM}?{ADJ}?{AGG_WORDS(ANY, PERIODICITY_WORDS)}{NUM}?{ADV}?{ADJ}?{ADJECTIVES}?)"
 
         PERIOD_WORDS = ['روز', 'هفته', 'روز\u200cهای', 'ساعت', 'شب', 'ماه', 'هفته\u200cهایم', 'هفته\u200cام', 'امروز', 'امروزم', 'ماهم']
@@ -59,8 +59,8 @@ class Patterns:
         TASKREVERSE = f"(?:{AGG_WORDS(ANY,REMINDER_WORDS)}(?P<REMIND>{VP}|{NOUN}){SCONJ}?{ADP}?(?P<PERIODICITY>{PERIODICITY_REGEX})(?P<NAME>{NP}))"
         TASKREVERSE2 = f"(?:{AGG_WORDS(ANY,REMINDER_WORDS)}{SCONJ}?{ADP}?(?P<PERIODICITY>{PERIODICITY_REGEX})(?P<NAME>{NP}))"
         TASKREVERSE3 = f"(?:{AGG_WORDS(ANY,REMINDER_WORDS)}(?P<REMIND>{VP}|{NOUN}){SCONJ}?{ADP}?(?P<PERIODICITY>{PERIODICITY_REGEX})(?P<START_DATE>{SAAT_REGEX}){ADP}?(?P<NAME>{NP}))"
-        TASKREVERSE4 = f"(?:{AGG_WORDS(ANY,REMINDER_WORDS)}{SCONJ}?{ADP}?(?P<PERIODICITY>{PERIODICITY_REGEX})(?P<START_DATE>{SAAT_REGEX}){ADP}(?P<NAME>{NP}))"
-        TASKREVERSE5 = f"(?:{AGG_WORDS(ANY,REMINDER_WORDS)}(?P<REMIND>{VP}|{NOUN}){SCONJ}?{ADP}?(?P<START_DATE>{SAAT_REGEX})(?P<NAME>{NP}))"
+        TASKREVERSE4 = f"(?:{AGG_WORDS(ANY,REMINDER_WORDS)}{SCONJ}?{ADP}?(?P<PERIODICITY>{PERIODICITY_REGEX})(?P<START_DATE>{SAAT_REGEX}){ADP}?(?P<NAME>{NP}))"
+        TASKREVERSE5 = f"(?:{AGG_WORDS(ANY,REMINDER_WORDS)}(?P<REMIND>{VP}|{NOUN}){SCONJ}?{ADP}?(?P<START_DATE>{SAAT_REGEX}){ADP}?(?P<NAME>{NP}))"
         DECLARATIONS = [
             # f"(?:{TASK}{ADP}+(?P<START_DATE>{DATETIME}){AGG_WORDS(ANY, START_WORDS)}{VERB}{ANY_T}+{ADP}+(?P<END_DATE>{DATETIME}){AGG_WORDS(ANY, END_WORDS)}{VERB})",
             # f"(?:{TASK}{ADP}?{VERB}{ADP}?(?P<START_DATE>{DATETIME}){AGG_WORDS(ANY, START_WORDS)}{VERB})",
