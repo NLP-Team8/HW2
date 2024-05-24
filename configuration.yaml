@@ -24,11 +24,12 @@ databases:
     type: sqlite
     file: opsdroid.db
 
+# for telegram
 # web:
-#   base-url: "https://580d-193-29-107-90.ngrok-free.app"
+#   base-url: ""
 # connectors:
 #     telegram:
-#       token: "7095268559:AAE8-6F2wqclDO6MVoXeFuIkWZp4EArQ2nE"
+#       token: ""
 #       reply-unauthorized: True
 # skills:
 #   main_skill:

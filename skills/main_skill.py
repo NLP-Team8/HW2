@@ -23,10 +23,10 @@ class MainSkill(Skill):
             return
         if message.text.strip() == 'راهنما':
             response_text = '''
-با استفاده از پیامی مانند "یادم باشه کتاب را ساعت 8:0  5 تیر بخوانم. می‌توانید تسک‌ اضافه کنید.
-با پیامی مانند تسک کتاب را کنسل بکن می‌توانید تسک را کنسل کنید.
+با استفاده از پیامی مانند "یادم باشه کتاب را ساعت 8:00  5 تیر بخوانم. می‌توانید تسک‌ اضافه کنید.
+با پیامی مانند تسک کتاب را کنسل کن می‌توانید تسک را کنسل کنید.
 با پیامی مانند تسک کتاب تمام شد نیز می‌توانید اتمام تسک را به برنامه اضافه کنید.
-می‌توانید زمان یک تسک را نیز با گفتن دوباره آن با زمان جدید عوض کنید.
+می‌توانید زمان یک تسک را نیز با گفتن زمان جدید عوض کنید، مثلا تسک کتاب را به ساعت 9:00  11 تیر تغییر بده.
 با پیام ریست کل تسک‌ها از دیتابیس پاک می‌شوند.
 '''
             await message.respond(response_text)
@@ -38,25 +38,29 @@ class MainSkill(Skill):
         for task in extractor.tasks:
             if task.task_type == "cancelation":
                 self.cancel_task(task, message.user)
-            if task.task_type == "done":
+            elif task.task_type == "done":
                 self.finish_task(task, message.user)
-            if task.task_type == "change":
+            elif task.task_type == "change":
                 self.change_task_time(task, message.user)
-            if task.task_type == "return":
+            elif task.task_type == "return":
                 if len(task.time.strip()) == 0:
                     res = self.cur.execute(f"SELECT * FROM tasks WHERE user='{message.user}'").fetchall()
                 else:
                     res = self.cur.execute(f"SELECT * FROM tasks WHERE user='{message.user}' AND (time LIKE '%{task.time}%' OR period LIKE '%{task.time}%')").fetchall()
-                await message.respond(str(res))
-            if task.task_type == "add":
+                response_text = '[\n'
+                for i, tasks_with_items in enumerate(res):
+                    response_text += 'task' + str(i) + ':\n{\n'  + 'name: ' + tasks_with_items[1] + '\ntime: ' + tasks_with_items[2] + '\nperiodicity: '
+                    response_text += tasks_with_items[3] + '\nis_done: ' + ('true' if tasks_with_items[4] == 1 else 'false') + '\nis_cancelled: ' +  ('true' if tasks_with_items[5] == 1 else 'false')+ '\n}\n'
+                response_text += ']'
+                await message.respond(response_text)
+            elif task.task_type == "add":
                 self.add_task(task, message.user)
 
         response_text = '['
         has_non_return_type = False
         for i, task in enumerate(extractor.tasks):
-            # print(task.task_type+'-----------+++++')
             if task.task_type != 'return':
-                response_text += '\n' + str(i) + ':\n' + str(task) + '\n'
+                response_text += '\ntask' + str(i) + ':\n' + str(task) + '\n'
                 has_non_return_type = True
         response_text += ']'
         if has_non_return_type:
