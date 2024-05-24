@@ -46,7 +46,14 @@ class MainSkill(Skill):
                 if len(task.time.strip()) == 0:
                     res = self.cur.execute(f"SELECT * FROM tasks WHERE user='{message.user}'").fetchall()
                 else:
-                    res = self.cur.execute(f"SELECT * FROM tasks WHERE user='{message.user}' AND (time LIKE '%{task.time}%' OR period LIKE '%{task.time}%')").fetchall()
+                    if task.time.strip() == 'هفتگی':
+                        res = self.cur.execute(f"SELECT * FROM tasks WHERE user='{message.user}' AND (period LIKE '%روز%' OR period='هفتگی')").fetchall()
+                    elif task.time.strip() == 'ماهانه':
+                        res = self.cur.execute(f"SELECT * FROM tasks WHERE user='{message.user}' AND (period LIKE '%روز%' OR period LIKE '%هفته%' OR period='هفتگی' OR period='ماهانه')").fetchall()
+                    elif task.time.strip() == 'سالانه':
+                        res = self.cur.execute(f"SELECT * FROM tasks WHERE user='{message.user}' AND (period LIKE '%روز%' OR period LIKE '%هفته%' OR period='هفتگی' OR period LIKE '%ماه%' OR period='سالانه')").fetchall()
+                    else:
+                        res = self.cur.execute(f"SELECT * FROM tasks WHERE user='{message.user}' AND (time LIKE '%{task.time}%' OR period LIKE '%{task.time}%')").fetchall()
                 response_text = '[\n'
                 for i, tasks_with_items in enumerate(res):
                     response_text += 'task' + str(i) + ':\n{\n'  + 'name: ' + tasks_with_items[1] + '\ntime: ' + tasks_with_items[2] + '\nperiodicity: '
