@@ -39,7 +39,7 @@ class Patterns:
         PERIODICITY_WORDS = ['روز', 'هفته', 'روز\u200cهای', 'شب', 'ماه', 'روزانه', 'روزانه\u200cام']
         PERIODICITY_REGEX = f"(?:{DET}?{NUM}?{ADJ}?{AGG_WORDS(ANY, PERIODICITY_WORDS)}{NUM}?{ADV}?{ADJ}?{ADJECTIVES}?)"
 
-        PERIOD_WORDS = ['روز', 'هفته', 'روز\u200cهای', 'ساعت', 'شب', 'ماه', 'هفته\u200cهایم', 'هفته\u200cام', 'دیروز','امروز', 'امروزم', 'ماهم', 'روزانه', 'روزانه\u200cام']
+        PERIOD_WORDS = ['روز', 'هفته', 'روز\u200cهای', 'ساعت', 'شب', 'ماه', 'هفته\u200cهایم', 'هفته\u200cام', 'دیروز','امروز', 'امروزم', 'ماهم', 'روزانه', 'ماهانه', 'ماهانه‌ام','روزانه\u200cام']
         PERIOD_REGEX = f"(?:{DET}?{NUM}?{ADJ}?{AGG_WORDS(ANY, PERIOD_WORDS)}{NUM}?{ADV}?{ADJ}?{ADJECTIVES}?)"
 
         ASSIGNEE_WORDS = ['مسئول', 'مسئولین', 'مسئولان', 'مسئولیت']
@@ -119,6 +119,7 @@ class Patterns:
 
         ]
         RETURNS = [
+            f"(?:(?P<PERIOD>{SAAT_REGEX}){ADP}?{RETURN_REGEX}.*)",
             f"(?:(?P<PERIOD>{PERIOD_REGEX}){ADP}?{RETURN_REGEX}.*)",
             f"(?:.*{RETURN_REGEX}.*)",
         ]
@@ -148,7 +149,7 @@ class Patterns:
         CANCELLATIONS = [f"(?:.*{CANCEL_REGEX})"]
         DONES = [f"(?:{TASK}{ADP}?.*{AGG_WORDS(ANY, END_WORDS)}{PAST_VERBS})"]
         CHANGED = [
-            f"(?:{TASK}{ADP}?{ADP}?{ADP}?{ADV}?{DAY_NIGHT}?(?P<NEW_DATE>{SAAT_REGEX}){ADP}?{AGG_WORDS(ANY, CHANGE_WORDS)})",
+             f"(?:{TASK}{ADP}?{ADP}?{ADP}?{ADV}?{DAY_NIGHT}?(?P<NEW_DATE>{SAAT_REGEX}){ADP}?{AGG_WORDS(ANY, CHANGE_WORDS)})",
             f"(?:{TASK}{ADP}?{ADP}?{NOUN}?{ADP}?{ADV}?{DAY_NIGHT}?(?P<NEW_DATE>{SAAT_REGEX}){ADP}?{AGG_WORDS(ANY, CHANGE_WORDS)})",
             f"(?:{TASK}{ADP}?{ADP}?{ADV}?{DAY_NIGHT}?(?P<OLD_DATE>{SAAT_REGEX}){ADP}?{DET}?{ADV}?{DAY_NIGHT}?(?P<NEW_DATE>{SAAT_REGEX}){ADP}?{AGG_WORDS(ANY, CHANGE_WORDS)})",
         ]
